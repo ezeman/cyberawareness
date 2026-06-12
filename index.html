@@ -1,0 +1,703 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cyber Security Awareness — บทเรียนสำหรับผู้ใช้งานทั่วไป</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@400;500;600;700&family=Sarabun:wght@300;400;500;600&display=swap" rel="stylesheet">
+<script src="https://accounts.google.com/gsi/client" async defer></script>
+<style>
+  :root{
+    --ink:#0e2233;
+    --ink-soft:#3d5468;
+    --paper:#f3f6f8;
+    --card:#ffffff;
+    --teal:#0e7c7b;
+    --teal-deep:#085a59;
+    --amber:#e8a93c;
+    --red:#c84b4b;
+    --green:#2e8b57;
+    --line:#dde6ec;
+    --radius:14px;
+    --shadow:0 2px 10px rgba(14,34,51,.07);
+    font-size:16px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Sarabun',sans-serif;background:var(--paper);color:var(--ink);line-height:1.7;min-height:100vh}
+  h1,h2,h3,h4,.display{font-family:'IBM Plex Sans Thai',sans-serif}
+  button{font-family:inherit;cursor:pointer;border:none}
+  .hidden{display:none !important}
+
+  .wrap{max-width:880px;margin:0 auto;padding:0 18px 80px}
+  header.topbar{position:sticky;top:0;z-index:50;background:rgba(255,255,255,.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+  .topbar-inner{max-width:880px;margin:0 auto;padding:12px 18px;display:flex;align-items:center;gap:12px;justify-content:space-between}
+  .brand{display:flex;align-items:center;gap:10px;font-family:'IBM Plex Sans Thai';font-weight:700;font-size:1.02rem}
+  .brand .shield{width:30px;height:30px;flex:none}
+  .userchip{display:flex;align-items:center;gap:8px;font-size:.85rem;color:var(--ink-soft)}
+  .userchip img{width:28px;height:28px;border-radius:50%}
+  .userchip .out{background:none;color:var(--teal);font-weight:600;font-size:.82rem;text-decoration:underline}
+
+  /* ===== Login ===== */
+  .login-screen{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px;background:linear-gradient(160deg,#0e2233 0%,#123a4a 55%,#0e7c7b 130%)}
+  .login-card{background:var(--card);border-radius:20px;box-shadow:0 20px 60px rgba(0,0,0,.35);max-width:420px;width:100%;padding:36px 32px;text-align:center}
+  .login-card .shield{width:72px;height:72px;margin:0 auto 14px}
+  .login-card h1{font-size:1.45rem;line-height:1.35;margin-bottom:6px}
+  .login-card p.sub{color:var(--ink-soft);font-size:.92rem;margin-bottom:26px}
+  .gbtn{width:100%;display:flex;align-items:center;justify-content:center;gap:10px;background:#fff;border:1.5px solid var(--line);border-radius:10px;padding:12px;font-size:.95rem;font-weight:600;color:var(--ink);transition:box-shadow .15s}
+  .gbtn:hover{box-shadow:var(--shadow)}
+  #googleBtnSlot{display:flex;justify-content:center;margin-bottom:8px}
+  .divider{display:flex;align-items:center;gap:10px;color:#9fb0bd;font-size:.78rem;margin:18px 0}
+  .divider::before,.divider::after{content:"";flex:1;height:1px;background:var(--line)}
+  .demo-form input{width:100%;padding:11px 14px;border:1.5px solid var(--line);border-radius:10px;font-family:inherit;font-size:.95rem;margin-bottom:10px}
+  .demo-form input:focus{outline:2px solid var(--teal);border-color:transparent}
+  .btn-primary{background:var(--teal);color:#fff;border-radius:10px;padding:12px 22px;font-weight:700;font-size:.97rem;width:100%;transition:background .15s}
+  .btn-primary:hover{background:var(--teal-deep)}
+  .login-note{font-size:.76rem;color:#9fb0bd;margin-top:18px}
+
+  /* ===== Dashboard ===== */
+  .hero{padding:34px 0 8px}
+  .hero .eyebrow{display:inline-block;font-size:.74rem;font-weight:700;letter-spacing:.12em;color:var(--teal);text-transform:uppercase;margin-bottom:6px}
+  .hero h1{font-size:1.7rem;line-height:1.35}
+  .hero p{color:var(--ink-soft);margin-top:6px;max-width:620px}
+
+  .stepper{display:flex;gap:8px;margin:20px 0 6px;flex-wrap:wrap}
+  .step{flex:1;min-width:140px;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 14px;font-size:.8rem;color:var(--ink-soft);box-shadow:var(--shadow)}
+  .step b{display:block;font-family:'IBM Plex Sans Thai';font-size:.92rem;color:var(--ink)}
+  .step.done{border-color:var(--teal)}
+  .step.done b::after{content:" ✓";color:var(--green)}
+  .step .sc{font-weight:700;color:var(--teal)}
+
+  .progress-band{margin:16px 0 22px;background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:16px 20px;box-shadow:var(--shadow);display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+  .ring{width:62px;height:62px;flex:none}
+  .ring text{font-family:'IBM Plex Sans Thai';font-weight:700;font-size:15px;fill:var(--ink)}
+  .progress-band .ptext b{display:block;font-family:'IBM Plex Sans Thai';font-size:1.02rem}
+  .progress-band .ptext span{font-size:.85rem;color:var(--ink-soft)}
+
+  .pre-cta{margin:0 0 22px;background:linear-gradient(135deg,#123a4a,#0e7c7b);color:#fff;border-radius:var(--radius);padding:22px;display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+  .pre-cta h3{font-size:1.1rem}
+  .pre-cta p{font-size:.85rem;color:#cfe5e4}
+  .pre-cta button{margin-left:auto;background:#fff;color:var(--teal-deep);font-weight:700;border-radius:10px;padding:12px 26px;font-size:.95rem}
+
+  .module-list{display:grid;gap:12px}
+  .module-list.locked{opacity:.45;pointer-events:none;filter:grayscale(.4)}
+  .lock-note{font-size:.84rem;color:var(--ink-soft);background:#fdf6e8;border:1px solid #f0dcae;border-radius:10px;padding:10px 14px;margin-bottom:12px}
+  .module-card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:18px 20px;display:flex;gap:16px;align-items:flex-start;box-shadow:var(--shadow);cursor:pointer;transition:transform .12s,border-color .12s;text-align:left;width:100%}
+  .module-card:hover{transform:translateY(-2px);border-color:var(--teal)}
+  .module-card .mnum{width:44px;height:44px;flex:none;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.4rem;background:#e7f2f2}
+  .module-card.done .mnum{background:var(--teal);color:#fff}
+  .module-card h3{font-size:1.04rem;margin-bottom:2px}
+  .module-card p{font-size:.86rem;color:var(--ink-soft)}
+  .module-card .status{margin-left:auto;flex:none;font-size:.78rem;font-weight:700;color:var(--green);align-self:center}
+
+  .test-cta{margin-top:26px;background:var(--ink);color:#fff;border-radius:var(--radius);padding:22px;display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+  .test-cta h3{font-size:1.1rem}
+  .test-cta p{font-size:.85rem;color:#bcd0dc}
+  .test-cta button{margin-left:auto;background:var(--amber);color:var(--ink);font-weight:700;border-radius:10px;padding:12px 26px;font-size:.95rem}
+  .test-cta button:disabled{background:#46606f;color:#8aa0ad;cursor:not-allowed}
+
+  /* ===== Lesson ===== */
+  .lesson-head{padding:30px 0 4px}
+  .lesson-head .crumb{background:none;color:var(--teal);font-weight:600;font-size:.86rem;margin-bottom:14px;display:inline-flex;align-items:center;gap:6px}
+  .lesson-head h1{font-size:1.5rem;display:flex;align-items:center;gap:12px}
+  .lesson-head h1 .em{font-size:1.7rem}
+  .lesson-body{margin-top:18px;display:grid;gap:14px}
+  .lcard{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:20px 22px;box-shadow:var(--shadow)}
+  .lcard h3{font-size:1rem;color:var(--teal-deep);margin-bottom:8px}
+  .lcard ul{padding-left:22px;display:grid;gap:6px;font-size:.94rem}
+  .lcard p{font-size:.94rem}
+  .callout{border-left:4px solid var(--amber);background:#fdf6e8;border-radius:0 10px 10px 0;padding:14px 18px;font-size:.92rem}
+  .callout.red{border-color:var(--red);background:#fbeeee}
+  .callout b{font-family:'IBM Plex Sans Thai'}
+  .lesson-nav{display:flex;gap:10px;margin-top:22px;flex-wrap:wrap}
+  .btn-ghost{background:#fff;border:1.5px solid var(--line);border-radius:10px;padding:11px 20px;font-weight:600;font-size:.92rem;color:var(--ink-soft)}
+  .btn-done{background:var(--teal);color:#fff;border-radius:10px;padding:11px 24px;font-weight:700;font-size:.95rem;margin-left:auto}
+  .btn-done:hover{background:var(--teal-deep)}
+
+  /* ===== Quiz ===== */
+  .quiz-head{padding:30px 0 10px}
+  .quiz-head h1{font-size:1.45rem}
+  .quiz-head .badge{display:inline-block;font-size:.72rem;font-weight:700;letter-spacing:.1em;padding:3px 10px;border-radius:99px;margin-bottom:8px}
+  .badge.pre{background:#e3edf5;color:#2a5a82}
+  .badge.post{background:#fdf0d8;color:#9a6d12}
+  .quiz-progress{height:8px;background:#dde6ec;border-radius:99px;margin:14px 0 22px;overflow:hidden}
+  .quiz-progress i{display:block;height:100%;background:var(--teal);border-radius:99px;transition:width .25s}
+  .qcard{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:24px;box-shadow:var(--shadow)}
+  .qcard .qno{font-size:.78rem;font-weight:700;color:var(--teal);letter-spacing:.08em;margin-bottom:6px}
+  .qcard h2{font-size:1.08rem;line-height:1.55;margin-bottom:16px}
+  .choices{display:grid;gap:10px}
+  .choice{text-align:left;background:#fff;border:1.5px solid var(--line);border-radius:11px;padding:13px 16px;font-size:.94rem;display:flex;gap:10px;align-items:flex-start;transition:border-color .12s,background .12s;color:var(--ink)}
+  .choice:hover{border-color:var(--teal)}
+  .choice .key{font-weight:700;color:var(--teal);flex:none}
+  .choice.correct{border-color:var(--green);background:#eef7f1}
+  .choice.wrong{border-color:var(--red);background:#fbeeee}
+  .choice.picked{border-color:var(--teal);background:#eef6f6}
+  .choice:disabled{cursor:default}
+  .explain{margin-top:14px;padding:13px 16px;border-radius:10px;font-size:.88rem;background:#eef4f8;border:1px solid var(--line)}
+  .quiz-next{margin-top:16px;display:flex}
+  .quiz-next button{margin-left:auto}
+
+  /* ===== Result ===== */
+  .result{background:var(--card);border:1px solid var(--line);border-radius:20px;box-shadow:var(--shadow);padding:38px 28px;text-align:center;margin-top:34px}
+  .result .big{font-family:'IBM Plex Sans Thai';font-size:3rem;font-weight:700;line-height:1.1}
+  .result .big.pass{color:var(--teal)}
+  .result .big.fail{color:var(--red)}
+  .result .big.neutral{color:#2a5a82}
+  .result h2{font-size:1.3rem;margin:8px 0 4px}
+  .result p{color:var(--ink-soft);font-size:.92rem}
+  .compare{display:flex;justify-content:center;gap:0;margin:22px auto 0;max-width:420px;border:1px solid var(--line);border-radius:14px;overflow:hidden}
+  .compare div{flex:1;padding:14px 8px}
+  .compare div + div{border-left:1px solid var(--line)}
+  .compare .lbl{font-size:.72rem;letter-spacing:.1em;font-weight:700;color:var(--ink-soft);text-transform:uppercase}
+  .compare .val{font-family:'IBM Plex Sans Thai';font-size:1.5rem;font-weight:700}
+  .compare .delta .val{color:var(--green)}
+  .cert{margin:24px auto 0;max-width:480px;border:2px dashed var(--teal);border-radius:14px;padding:20px;text-align:center;background:#f5fafa}
+  .cert .ttl{font-size:.74rem;letter-spacing:.16em;color:var(--teal);font-weight:700;text-transform:uppercase}
+  .cert .name{font-family:'IBM Plex Sans Thai';font-size:1.25rem;font-weight:700;margin:6px 0 2px}
+  .cert .meta{font-size:.8rem;color:var(--ink-soft)}
+  .savestatus{margin-top:16px;font-size:.84rem;font-weight:600}
+  .savestatus.ok{color:var(--green)}
+  .savestatus.warn{color:#9a6d12}
+  .result .actions{display:flex;gap:10px;justify-content:center;margin-top:24px;flex-wrap:wrap}
+  .result .actions .btn-primary{width:auto}
+  .review{margin-top:26px;text-align:left;display:grid;gap:10px}
+  .review .rv{background:#fff;border:1px solid var(--line);border-radius:11px;padding:14px 16px;font-size:.88rem}
+  .review .rv.ok{border-left:4px solid var(--green)}
+  .review .rv.no{border-left:4px solid var(--red)}
+  .review .rv b{display:block;margin-bottom:4px}
+
+  @media (max-width:560px){
+    .hero h1{font-size:1.4rem}
+    .test-cta button,.pre-cta button{margin-left:0;width:100%}
+    .module-card .status{display:none}
+  }
+  @media (prefers-reduced-motion: reduce){*{transition:none !important}}
+</style>
+</head>
+<body>
+
+<!-- ============ LOGIN ============ -->
+<div id="viewLogin" class="login-screen">
+  <div class="login-card">
+    <svg class="shield" viewBox="0 0 48 48" aria-hidden="true">
+      <path d="M24 3 6 10v12c0 11.5 7.7 20.3 18 23 10.3-2.7 18-11.5 18-23V10L24 3z" fill="#0e7c7b"/>
+      <path d="M16 24.5l5.5 5.5L33 18.5" fill="none" stroke="#fff" stroke-width="3.6" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+    <h1>Cyber Security Awareness</h1>
+    <p class="sub">Pre-test → บทเรียน 6 บท → Post-test<br>วัดผลก่อน–หลังเรียน พร้อมบันทึกผลอัตโนมัติ</p>
+
+    <div id="googleBtnSlot"></div>
+    <button class="gbtn" id="gFallbackBtn">
+      <svg width="20" height="20" viewBox="0 0 48 48"><path fill="#FFC107" d="M43.6 20.1H42V20H24v8h11.3C33.7 32.7 29.2 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.9 1.2 8 3l5.7-5.7C34.3 6.1 29.4 4 24 4 13 4 4 13 4 24s9 20 20 20 20-9 20-20c0-1.3-.1-2.6-.4-3.9z"/><path fill="#FF3D00" d="M6.3 14.7l6.6 4.8C14.7 15.1 19 12 24 12c3.1 0 5.9 1.2 8 3l5.7-5.7C34.3 6.1 29.4 4 24 4 16.3 4 9.7 8.3 6.3 14.7z"/><path fill="#4CAF50" d="M24 44c5.2 0 9.9-2 13.4-5.2l-6.2-5.2C29.2 35.1 26.7 36 24 36c-5.2 0-9.6-3.3-11.3-8l-6.5 5C9.6 39.6 16.3 44 24 44z"/><path fill="#1976D2" d="M43.6 20.1H42V20H24v8h11.3c-.8 2.2-2.2 4.2-4.1 5.6l6.2 5.2C41.4 35.4 44 30.1 44 24c0-1.3-.1-2.6-.4-3.9z"/></svg>
+      เข้าสู่ระบบด้วย Google
+    </button>
+
+    <div class="divider">หรือกรอกข้อมูลเพื่อทดลองใช้งาน</div>
+
+    <div class="demo-form">
+      <input id="demoName" type="text" placeholder="ชื่อ-นามสกุล" autocomplete="name">
+      <input id="demoEmail" type="email" placeholder="อีเมล (Gmail)" autocomplete="email">
+      <button class="btn-primary" id="demoLoginBtn">เริ่มเรียน</button>
+    </div>
+
+    <p class="login-note">ระบบใช้บัญชี Google เพื่อระบุตัวผู้เรียนและบันทึกผลการทดสอบเท่านั้น</p>
+  </div>
+</div>
+
+<!-- ============ APP ============ -->
+<div id="viewApp" class="hidden">
+  <header class="topbar">
+    <div class="topbar-inner">
+      <div class="brand">
+        <svg class="shield" viewBox="0 0 48 48" aria-hidden="true">
+          <path d="M24 3 6 10v12c0 11.5 7.7 20.3 18 23 10.3-2.7 18-11.5 18-23V10L24 3z" fill="#0e7c7b"/>
+          <path d="M16 24.5l5.5 5.5L33 18.5" fill="none" stroke="#fff" stroke-width="3.6" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        Cyber Awareness
+      </div>
+      <div class="userchip">
+        <img id="userPic" src="" alt="" class="hidden">
+        <span id="userName"></span>
+        <button class="out" id="logoutBtn">ออกจากระบบ</button>
+      </div>
+    </div>
+  </header>
+  <div class="wrap">
+    <div id="screenDash"></div>
+    <div id="screenLesson" class="hidden"></div>
+    <div id="screenQuiz" class="hidden"></div>
+    <div id="screenResult" class="hidden"></div>
+  </div>
+</div>
+
+<script>
+/* ==========================================================
+   การตั้งค่า (ดูคู่มือใน SETUP.md)
+
+   1) GOOGLE_CLIENT_ID — สำหรับปุ่ม Sign in with Google จริง
+      สร้างที่ console.cloud.google.com → Credentials →
+      OAuth client ID (Web) แล้วเพิ่มโดเมนที่โฮสต์ไฟล์นี้ใน
+      Authorized JavaScript origins
+
+   2) SHEETS_WEBAPP_URL — สำหรับบันทึกผลลง Google Sheet
+      สร้าง Google Apps Script จากไฟล์ google-apps-script.gs
+      Deploy เป็น Web app (Anyone) แล้วนำ URL มาวางที่นี่
+   ========================================================== */
+const GOOGLE_CLIENT_ID = "";   // เช่น "xxxx.apps.googleusercontent.com"
+const SHEETS_WEBAPP_URL = "";  // เช่น "https://script.google.com/macros/s/XXXX/exec"
+
+/* ===================== ข้อมูลบทเรียน ===================== */
+const MODULES = [
+  {
+    id:"phishing", em:"🎣", title:"ฟิชชิง (Phishing) — อีเมลและข้อความหลอกลวง",
+    desc:"จุดสังเกตอีเมลปลอม ลิงก์ปลอม และวิธีรับมือ",
+    body:[
+      {h:"ฟิชชิงคืออะไร", p:"การหลอกลวงผ่านอีเมล SMS หรือ LINE โดยปลอมตัวเป็นหน่วยงานที่น่าเชื่อถือ เช่น ธนาคาร ไปรษณีย์ หรือฝ่าย IT ขององค์กร เพื่อหลอกให้เรากรอกรหัสผ่าน คลิกลิงก์ หรือเปิดไฟล์แนบที่เป็นอันตราย"},
+      {h:"จุดสังเกต 5 ข้อ", ul:[
+        "สร้างความเร่งด่วนหรือความกลัว เช่น \"บัญชีจะถูกระงับใน 24 ชม.\"",
+        "ชื่อผู้ส่งดูคล้ายของจริงแต่โดเมนผิด เช่น support@bank-th.xyz",
+        "ลิงก์ที่แสดงไม่ตรงกับ URL จริง (ลองวางเมาส์ค้างไว้ก่อนคลิก)",
+        "ขอข้อมูลส่วนตัว รหัสผ่าน หรือ OTP — หน่วยงานจริงจะไม่ขอทางอีเมล",
+        "สะกดผิด ภาษาแปลก หรือโลโก้เพี้ยนจากของจริง"
+      ]},
+      {callout:"red", b:"จำไว้:", p:"ไม่มีธนาคาร หน่วยงานราชการ หรือฝ่าย IT ที่จะขอรหัสผ่านหรือ OTP จากคุณทางอีเมล โทรศัพท์ หรือแชต — ใครขอ คนนั้นคือมิจฉาชีพ"},
+      {h:"เมื่อสงสัยว่าเป็นฟิชชิง", ul:[
+        "อย่าคลิกลิงก์หรือเปิดไฟล์แนบ",
+        "ติดต่อหน่วยงานนั้นผ่านช่องทางทางการด้วยตนเอง (พิมพ์ URL เอง / โทรเบอร์กลาง)",
+        "รายงานฝ่าย IT หรือผู้ดูแลระบบทันที แม้เผลอคลิกไปแล้วก็ต้องรีบแจ้ง"
+      ]}
+    ]
+  },
+  {
+    id:"password", em:"🔑", title:"รหัสผ่านและการยืนยันตัวตน (MFA)",
+    desc:"ตั้งรหัสผ่านที่ปลอดภัย และเปิดยืนยันตัวตน 2 ชั้น",
+    body:[
+      {h:"รหัสผ่านที่ดี", ul:[
+        "ยาวอย่างน้อย 12 ตัวอักษร — ความยาวสำคัญกว่าความซับซ้อน",
+        "ใช้วลีที่จำง่ายแต่เดายาก เช่น กาแฟเย็น-ตอนบ่าย-3แก้ว!",
+        "ไม่ใช้ข้อมูลส่วนตัว เช่น วันเกิด เบอร์โทร ชื่อลูก",
+        "หนึ่งบริการ = หนึ่งรหัสผ่าน ห้ามใช้ซ้ำกันทุกเว็บ",
+        "ใช้โปรแกรมจัดการรหัสผ่าน (Password Manager) ช่วยจำ"
+      ]},
+      {h:"การยืนยันตัวตน 2 ชั้น (MFA / 2FA)", p:"เปิดใช้ทุกบัญชีที่เปิดได้ โดยเฉพาะอีเมล ธนาคาร และบัญชีงาน แม้รหัสผ่านหลุด คนร้ายก็ยังเข้าบัญชีไม่ได้ แนะนำใช้แอป Authenticator มากกว่า SMS"},
+      {callout:"amber", b:"ระวัง:", p:"OTP คือกุญแจชั้นสุดท้ายของบัญชีคุณ ห้ามบอก OTP ให้ใครเด็ดขาด ไม่ว่าปลายสายจะอ้างว่าเป็นใครก็ตาม"}
+    ]
+  },
+  {
+    id:"malware", em:"🦠", title:"มัลแวร์และแรนซัมแวร์",
+    desc:"ไฟล์แนบอันตราย โปรแกรมเถื่อน และการเรียกค่าไถ่ข้อมูล",
+    body:[
+      {h:"มัลแวร์เข้ามาได้อย่างไร", ul:[
+        "ไฟล์แนบอีเมล โดยเฉพาะ .exe .zip .js หรือเอกสารที่ขอให้ \"Enable Macro\"",
+        "โปรแกรมเถื่อน / crack / โหลดหนังเถื่อน",
+        "USB แปลกหน้าที่เก็บได้หรือมีคนให้มา",
+        "เว็บปลอมที่หลอกให้กดอัปเดตโปรแกรม"
+      ]},
+      {h:"แรนซัมแวร์ (Ransomware)", p:"มัลแวร์ที่เข้ารหัสไฟล์ทั้งเครื่องและทั้งเครือข่าย แล้วเรียกค่าไถ่ องค์กรอาจหยุดให้บริการเป็นสัปดาห์ จุดเริ่มต้นส่วนใหญ่มาจากพนักงานหนึ่งคนเปิดไฟล์แนบเพียงไฟล์เดียว"},
+      {h:"การป้องกัน", ul:[
+        "ไม่เปิดไฟล์แนบที่ไม่คาดคิด แม้ผู้ส่งจะเป็นคนรู้จัก (บัญชีเขาอาจถูกแฮก)",
+        "ไม่ติดตั้งโปรแกรมเองนอกเหนือจากที่องค์กรอนุญาต",
+        "อัปเดตระบบปฏิบัติการและโปรแกรมสม่ำเสมอ",
+        "สำรองข้อมูลสำคัญตามนโยบายองค์กร"
+      ]},
+      {callout:"red", b:"ถ้าเครื่องมีอาการผิดปกติ:", p:"ไฟล์เปิดไม่ได้ นามสกุลไฟล์เปลี่ยน มีหน้าจอเรียกค่าไถ่ — ให้ถอดสาย LAN/ปิด Wi-Fi แล้วแจ้ง IT ทันที อย่าพยายามแก้เอง และอย่าจ่ายค่าไถ่"}
+    ]
+  },
+  {
+    id:"social", em:"🎭", title:"Social Engineering — กลโกงทางจิตวิทยา",
+    desc:"แก๊งคอลเซ็นเตอร์ การปลอมเป็นเจ้าหน้าที่ และการหลอกถามข้อมูล",
+    body:[
+      {h:"คนร้ายโจมตี \"คน\" ไม่ใช่ \"ระบบ\"", p:"Social Engineering คือการหลอกใช้ความไว้ใจ ความกลัว หรือความเกรงใจ เช่น โทรมาอ้างเป็นตำรวจ เจ้าหน้าที่ธนาคาร หรือแม้แต่ผู้บริหารในองค์กร เพื่อให้เราทำตามคำสั่งหรือเปิดเผยข้อมูล"},
+      {h:"รูปแบบที่พบบ่อยในไทย", ul:[
+        "แก๊งคอลเซ็นเตอร์อ้างพัสดุผิดกฎหมาย / คดีฟอกเงิน ให้โอนเงิน \"ตรวจสอบ\"",
+        "ปลอมเป็นหัวหน้า ทัก LINE ให้โอนเงินหรือซื้อบัตรของขวัญด่วน",
+        "อ้างเป็นช่าง/เจ้าหน้าที่ ขอเข้าพื้นที่หวงห้ามหรือขอเสียบอุปกรณ์",
+        "หลอกให้ติดตั้งแอป \"หน่วยงานรัฐ\" แล้วดูดเงินจากมือถือ"
+      ]},
+      {h:"หลักรับมือ: ช้าไว้ก่อน", ul:[
+        "เรื่องเงินและข้อมูล ให้ตรวจสอบกลับผ่านช่องทางที่เราหาเองเสมอ",
+        "ตำรวจ/ศาล/ธนาคารจริง ไม่ทำคดีผ่านโทรศัพท์และไม่ให้โอนเงิน",
+        "ความเร่งด่วนผิดปกติ = สัญญาณเตือนอันดับหนึ่ง",
+        "ปฏิเสธอย่างสุภาพได้เสมอ ไม่ต้องเกรงใจคนแปลกหน้า"
+      ]}
+    ]
+  },
+  {
+    id:"safeuse", em:"💻", title:"ใช้งานอุปกรณ์และอินเทอร์เน็ตอย่างปลอดภัย",
+    desc:"Wi-Fi สาธารณะ, USB, การล็อกหน้าจอ และการใช้เครื่องร่วมกัน",
+    body:[
+      {h:"นิสัยปลอดภัยประจำวัน", ul:[
+        "ล็อกหน้าจอทุกครั้งที่ลุกจากโต๊ะ (Windows + L)",
+        "ไม่ให้ผู้อื่นใช้บัญชีของเรา และไม่ใช้บัญชีของผู้อื่น",
+        "ไม่เสียบ USB ที่ไม่ทราบที่มาเข้าเครื่องทำงาน",
+        "ตรวจ URL ให้เป็น https:// และสะกดถูกก่อนกรอกข้อมูลสำคัญ"
+      ]},
+      {h:"Wi-Fi สาธารณะ", p:"หลีกเลี่ยงการทำธุรกรรมการเงินหรือเข้าระบบงานผ่าน Wi-Fi ฟรีที่ไม่รู้จัก หากจำเป็นให้ใช้อินเทอร์เน็ตมือถือหรือ VPN ขององค์กรแทน"},
+      {h:"โซเชียลมีเดีย", ul:[
+        "ไม่โพสต์ข้อมูลภายในองค์กร ภาพหน้าจอระบบงาน หรือข้อมูลผู้รับบริการ",
+        "ระวังการเปิดเผยข้อมูลส่วนตัวที่ใช้เดารหัสผ่านหรือคำถามกู้บัญชี",
+        "ตรวจสอบข่าวก่อนแชร์ — ลิงก์ข่าวปลอมมักพ่วงมัลแวร์"
+      ]}
+    ]
+  },
+  {
+    id:"data", em:"🗂️", title:"การปกป้องข้อมูลส่วนบุคคล (PDPA)",
+    desc:"หน้าที่ของผู้ใช้งานต่อข้อมูลส่วนบุคคลและข้อมูลองค์กร",
+    body:[
+      {h:"ข้อมูลส่วนบุคคลคืออะไร", p:"ข้อมูลที่ระบุตัวบุคคลได้ เช่น ชื่อ เลขบัตรประชาชน เบอร์โทร ประวัติสุขภาพ ภาพถ่าย กฎหมาย PDPA กำหนดให้องค์กรและพนักงานทุกคนมีหน้าที่ปกป้องข้อมูลเหล่านี้"},
+      {h:"แนวปฏิบัติ", ul:[
+        "เข้าถึงข้อมูลเท่าที่จำเป็นต่องานของตนเองเท่านั้น",
+        "ไม่ส่งข้อมูลส่วนบุคคลผ่านช่องทางส่วนตัว เช่น LINE ส่วนตัว อีเมลส่วนตัว",
+        "ไม่ถ่ายภาพหน้าจอที่มีข้อมูลผู้รับบริการ/ลูกค้าไปเผยแพร่",
+        "ทำลายเอกสารที่มีข้อมูลส่วนบุคคลด้วยเครื่องย่อยกระดาษ",
+        "พบข้อมูลรั่วไหล ให้รายงานผู้ดูแล/DPO ทันที — ความเร็วสำคัญมาก"
+      ]},
+      {callout:"amber", b:"หลักง่าย ๆ:", p:"ก่อนส่งหรือแชร์ข้อมูลใคร ให้ถามตัวเองว่า \"ถ้าเป็นข้อมูลของเราเอง เรายอมให้ทำแบบนี้ไหม\""}
+    ]
+  }
+];
+
+/* ===================== คลังข้อสอบ (ใช้ทั้ง Pre-test และ Post-test) ===================== */
+const QUIZ = [
+  {q:"คุณได้รับอีเมลจาก \"ธนาคาร\" แจ้งว่าบัญชีจะถูกระงับใน 24 ชั่วโมง พร้อมลิงก์ให้ยืนยันตัวตน ควรทำอย่างไร",
+   c:["คลิกลิงก์ทันทีเพื่อไม่ให้บัญชีถูกระงับ","ส่งต่ออีเมลให้เพื่อนช่วยดู","ไม่คลิกลิงก์ และติดต่อธนาคารผ่านช่องทางทางการด้วยตนเอง","ตอบกลับอีเมลเพื่อสอบถามรายละเอียด"],
+   a:2, ex:"ความเร่งด่วน + ลิงก์ให้ยืนยันตัวตน คือลักษณะคลาสสิกของฟิชชิง ให้ตรวจสอบผ่านช่องทางทางการที่เราหาเองเท่านั้น"},
+  {q:"ข้อใดคือสัญญาณของอีเมลฟิชชิงที่ชัดเจนที่สุด",
+   c:["ส่งมาตอนเช้า","ขอให้กรอกรหัสผ่านหรือ OTP ผ่านลิงก์","มีโลโก้บริษัท","เขียนเป็นภาษาอังกฤษ"],
+   a:1, ex:"หน่วยงานจริงไม่ขอรหัสผ่านหรือ OTP ผ่านอีเมลหรือลิงก์เด็ดขาด"},
+  {q:"รหัสผ่านที่ปลอดภัยที่สุดในตัวเลือกต่อไปนี้คือข้อใด",
+   c:["Somchai2530 (ชื่อ+ปีเกิด)","123456789!","กาแฟเย็นตอนบ่าย3แก้ว!Coffee","P@ss1 ใช้ซ้ำทุกเว็บเพื่อจำง่าย"],
+   a:2, ex:"วลียาวที่จำง่ายแต่เดายากปลอดภัยกว่ารหัสสั้น และห้ามใช้ข้อมูลส่วนตัวหรือใช้รหัสซ้ำหลายเว็บ"},
+  {q:"มีคนโทรมาอ้างเป็นเจ้าหน้าที่ธนาคาร ขอ OTP ที่เพิ่งส่งเข้ามือถือคุณ \"เพื่อยืนยันการระงับธุรกรรมต้องสงสัย\" ควรทำอย่างไร",
+   c:["บอก OTP เพราะเขากำลังช่วยเรา","บอกเฉพาะ 3 ตัวแรก","ไม่บอก OTP เด็ดขาด วางสาย แล้วโทรหาธนาคารด้วยเบอร์ทางการเอง","ขอคุยกับหัวหน้าของเขาก่อน"],
+   a:2, ex:"OTP คือกุญแจบัญชีของเรา เจ้าหน้าที่จริงไม่มีวันขอ ใครขอคือมิจฉาชีพ 100%"},
+  {q:"คุณพบ USB Drive ตกอยู่ที่ลานจอดรถขององค์กร ควรทำอย่างไร",
+   c:["เสียบเข้าคอมพิวเตอร์ทำงานเพื่อดูว่าเป็นของใครจะได้คืนเจ้าของ","เสียบกับคอมส่วนตัวที่บ้านแทน","เก็บไว้ใช้เอง","ส่งมอบให้ฝ่าย IT หรือผู้ดูแลโดยไม่เสียบกับเครื่องใด ๆ"],
+   a:3, ex:"USB ที่จงใจทำตกเป็นเทคนิคโจมตีจริงที่ใช้ปล่อยมัลแวร์เข้าองค์กร ห้ามเสียบกับเครื่องใดทั้งสิ้น"},
+  {q:"ไฟล์ในเครื่องคุณเปิดไม่ได้และมีข้อความเรียกค่าไถ่ปรากฏขึ้น สิ่งแรกที่ควรทำคือ",
+   c:["รีสตาร์ตเครื่องหลาย ๆ รอบ","ตัดการเชื่อมต่อเครือข่าย (ถอด LAN/ปิด Wi-Fi) แล้วแจ้ง IT ทันที","โอนเงินค่าไถ่เพื่อให้ได้ไฟล์คืนเร็วที่สุด","ลบไฟล์แปลก ๆ ออกเอง"],
+   a:1, ex:"การตัดเครือข่ายช่วยหยุดการลามไปเครื่องอื่น และ IT ต้องรับมือทันที ห้ามจ่ายค่าไถ่และห้ามแก้เอง"},
+  {q:"หัวหน้าทัก LINE มาให้ \"โอนเงินด่วนภายใน 10 นาที เดี๋ยวอธิบายทีหลัง\" ควรทำอย่างไร",
+   c:["โอนทันทีเพราะเป็นคำสั่งหัวหน้า","โทรหาหัวหน้าด้วยเบอร์ที่เรามีอยู่เดิมเพื่อยืนยันก่อน","ตอบกลับใน LINE ถามว่าใช่ตัวจริงไหม","โอนครึ่งเดียวไว้ก่อน"],
+   a:1, ex:"บัญชี LINE ถูกปลอม/แฮกได้ การยืนยันต้องผ่านช่องทางอื่นที่เราหาเอง เช่น โทรเบอร์เดิมที่บันทึกไว้"},
+  {q:"ข้อใดเป็นการใช้ Wi-Fi สาธารณะอย่างเหมาะสมที่สุด",
+   c:["ทำธุรกรรมธนาคารตามปกติ","เข้าระบบงานองค์กรโดยไม่ใช้ VPN","ใช้อ่านข่าวทั่วไป และเลี่ยงการกรอกรหัสผ่านหรือทำธุรกรรม","แชร์ Wi-Fi ต่อให้คนข้าง ๆ"],
+   a:2, ex:"Wi-Fi สาธารณะอาจถูกดักจับข้อมูล งานสำคัญให้ใช้เน็ตมือถือหรือ VPN ขององค์กร"},
+  {q:"เมื่อต้องลุกจากโต๊ะทำงานชั่วคราว ควรทำอย่างไรกับคอมพิวเตอร์",
+   c:["เปิดทิ้งไว้เพราะไปแป๊บเดียว","ล็อกหน้าจอทุกครั้ง (เช่น Windows + L)","ปิดจอภาพอย่างเดียว","ฝากเพื่อนข้างโต๊ะดูให้"],
+   a:1, ex:"หน้าจอที่ไม่ล็อกเปิดทางให้ผู้อื่นเข้าถึงข้อมูลหรือสวมสิทธิ์บัญชีของเราได้ทันที"},
+  {q:"เพื่อนร่วมงานขอให้ส่งรายชื่อพร้อมเลขบัตรประชาชนของผู้รับบริการผ่าน LINE ส่วนตัว เพราะ \"สะดวกดี\" ควรทำอย่างไร",
+   c:["ส่งให้เพราะเป็นเพื่อนร่วมงานกันเอง","ส่งให้แต่ลบแชตทิ้งทีหลัง","ปฏิเสธ และใช้ช่องทางที่องค์กรกำหนดสำหรับข้อมูลส่วนบุคคลเท่านั้น","ส่งเป็นรูปภาพแทนไฟล์"],
+   a:2, ex:"ข้อมูลส่วนบุคคลต้องรับส่งผ่านช่องทางที่องค์กรกำหนดเท่านั้น การส่งผ่านช่องทางส่วนตัวเสี่ยงรั่วไหลและผิด PDPA"},
+  {q:"คุณเผลอคลิกลิงก์ในอีเมลต้องสงสัยและกรอกรหัสผ่านไปแล้ว ควรทำอย่างไร",
+   c:["เงียบไว้เพราะอายและกลัวถูกตำหนิ","เปลี่ยนรหัสผ่านทันที และรายงานฝ่าย IT โดยเร็วที่สุด","รอดูว่ามีอะไรผิดปกติไหมค่อยแจ้ง","ลบอีเมลทิ้งก็เพียงพอ"],
+   a:1, ex:"ความเร็วในการแจ้งคือสิ่งที่ช่วยองค์กรได้มากที่สุด การรายงานเหตุการณ์ไม่ใช่ความผิด แต่การปกปิดต่างหากที่สร้างความเสียหาย"},
+  {q:"ข้อใดสรุปหลักการ \"Cyber Security เป็นหน้าที่ของทุกคน\" ได้ถูกต้องที่สุด",
+   c:["เป็นหน้าที่ของฝ่าย IT เท่านั้น เพราะมีระบบป้องกันอยู่แล้ว","ผู้ใช้งานทุกคนคือแนวป้องกันด่านแรก เพราะการโจมตีส่วนใหญ่เริ่มจากการหลอกคน","ติดตั้งแอนติไวรัสแล้วปลอดภัย 100%","ใช้คอมส่วนตัวทำงานจะปลอดภัยกว่า"],
+   a:1, ex:"เทคโนโลยีป้องกันได้เพียงส่วนหนึ่ง การโจมตีส่วนใหญ่มุ่งหลอก \"คน\" ความตระหนักรู้ของผู้ใช้งานจึงเป็นเกราะสำคัญที่สุด"}
+];
+const PASS_PERCENT = 80;
+
+/* ===================== State ===================== */
+let user = null;
+let completed = new Set();
+let currentModule = 0;
+let quizMode = "post";          // "pre" | "post"
+let quizIndex = 0, quizScore = 0, quizAnswers = [], answered = false;
+let preResult = null;            // {score, pct, when}
+let postResult = null;
+
+const $ = id => document.getElementById(id);
+
+/* ===================== บันทึกผลลง Google Sheet ===================== */
+function sendToSheet(type, score, pct, pass, cb){
+  if(!SHEETS_WEBAPP_URL){ cb && cb("nosheet"); return; }
+  const payload = {
+    timestamp: new Date().toISOString(),
+    name: user.name,
+    email: user.email,
+    type: type,                       // "pretest" | "posttest"
+    score: score,
+    total: QUIZ.length,
+    percent: pct,
+    result: type === "posttest" ? (pass ? "ผ่าน" : "ไม่ผ่าน") : "-",
+    preScore: preResult ? preResult.pct : "",
+    userAgent: navigator.userAgent.slice(0,120)
+  };
+  fetch(SHEETS_WEBAPP_URL, {
+    method: "POST",
+    mode: "no-cors",                  // Apps Script ไม่ส่ง CORS header — ใช้ no-cors ส่งข้อมูลได้
+    headers: {"Content-Type": "text/plain;charset=utf-8"},
+    body: JSON.stringify(payload)
+  }).then(()=> cb && cb("ok")).catch(()=> cb && cb("error"));
+}
+function saveStatusHTML(state){
+  if(state==="ok")      return '<div class="savestatus ok">✓ บันทึกผลลง Google Sheet เรียบร้อยแล้ว</div>';
+  if(state==="nosheet") return '<div class="savestatus warn">⚠ ยังไม่ได้ตั้งค่า SHEETS_WEBAPP_URL — ผลคะแนนนี้ยังไม่ถูกบันทึก (ดูคู่มือ SETUP.md)</div>';
+  return '<div class="savestatus warn">⚠ ส่งข้อมูลไม่สำเร็จ กรุณาตรวจสอบการเชื่อมต่อ</div>';
+}
+
+/* ===================== Login ===================== */
+function handleCredential(resp){
+  try{
+    const payload = JSON.parse(decodeURIComponent(escape(atob(resp.credential.split('.')[1].replace(/-/g,'+').replace(/_/g,'/')))));
+    loginAs({name: payload.name || payload.email, email: payload.email, pic: payload.picture || ""});
+  }catch(e){ alert("เข้าสู่ระบบไม่สำเร็จ กรุณาลองใหม่"); }
+}
+function initGoogle(){
+  if(!GOOGLE_CLIENT_ID) return;
+  const tryInit = () => {
+    if(window.google && google.accounts && google.accounts.id){
+      google.accounts.id.initialize({client_id: GOOGLE_CLIENT_ID, callback: handleCredential});
+      google.accounts.id.renderButton($("googleBtnSlot"), {theme:"outline", size:"large", text:"signin_with", width:340, locale:"th"});
+      $("gFallbackBtn").classList.add("hidden");
+    } else setTimeout(tryInit, 300);
+  };
+  tryInit();
+}
+$("gFallbackBtn").addEventListener("click", () => {
+  alert("โหมดตัวอย่าง: ยังไม่ได้ตั้งค่า Google Client ID\nกรอกชื่อและอีเมลด้านล่างเพื่อทดลองใช้งานได้เลย\n\n(เมื่อนำไปใช้จริง ให้ใส่ GOOGLE_CLIENT_ID ในไฟล์ ปุ่ม Google จริงจะทำงานอัตโนมัติ)");
+  $("demoName").focus();
+});
+$("demoLoginBtn").addEventListener("click", () => {
+  const name = $("demoName").value.trim();
+  const email = $("demoEmail").value.trim();
+  if(!name || !email || !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)){
+    alert("กรุณากรอกชื่อและอีเมลให้ถูกต้อง"); return;
+  }
+  loginAs({name, email, pic:""});
+});
+function loginAs(u){
+  user = u;
+  $("viewLogin").classList.add("hidden");
+  $("viewApp").classList.remove("hidden");
+  $("userName").textContent = u.name;
+  if(u.pic){ $("userPic").src = u.pic; $("userPic").classList.remove("hidden"); }
+  else $("userPic").classList.add("hidden");
+  showDash();
+}
+$("logoutBtn").addEventListener("click", () => {
+  user = null; completed = new Set(); preResult = null; postResult = null;
+  $("viewApp").classList.add("hidden");
+  $("viewLogin").classList.remove("hidden");
+});
+
+/* ===================== Dashboard ===================== */
+function showScreen(id){
+  ["screenDash","screenLesson","screenQuiz","screenResult"].forEach(s => $(s).classList.add("hidden"));
+  $(id).classList.remove("hidden");
+  window.scrollTo({top:0});
+}
+function ringSVG(pct){
+  const r=26, c=2*Math.PI*r, off=c*(1-pct/100);
+  return `<svg class="ring" viewBox="0 0 62 62">
+    <circle cx="31" cy="31" r="${r}" fill="none" stroke="#dde6ec" stroke-width="6"/>
+    <circle cx="31" cy="31" r="${r}" fill="none" stroke="#0e7c7b" stroke-width="6"
+      stroke-linecap="round" stroke-dasharray="${c}" stroke-dashoffset="${off}"
+      transform="rotate(-90 31 31)"/>
+    <text x="31" y="36" text-anchor="middle">${pct}%</text></svg>`;
+}
+function showDash(){
+  const pct = Math.round(completed.size / MODULES.length * 100);
+  const allDone = completed.size === MODULES.length;
+  const preDone = !!preResult;
+  $("screenDash").innerHTML = `
+    <div class="hero">
+      <span class="eyebrow">หลักสูตรความปลอดภัยไซเบอร์</span>
+      <h1>สวัสดี ${esc(user.name.split(" ")[0])} — มาเป็นแนวป้องกันด่านแรกขององค์กรกัน</h1>
+      <p>ขั้นตอน: ทำ <b>Pre-test</b> วัดความรู้ก่อนเรียน → เรียนครบ ${MODULES.length} บท → ทำ <b>Post-test</b> เกณฑ์ผ่าน ${PASS_PERCENT}% ผลคะแนนถูกบันทึกอัตโนมัติ</p>
+    </div>
+
+    <div class="stepper">
+      <div class="step ${preDone?'done':''}"><b>1. Pre-test</b>${preDone?`ได้ <span class="sc">${preResult.pct}%</span> ก่อนเรียน`:'วัดความรู้ก่อนเรียน'}</div>
+      <div class="step ${allDone?'done':''}"><b>2. บทเรียน</b>${completed.size}/${MODULES.length} บท</div>
+      <div class="step ${postResult?'done':''}"><b>3. Post-test</b>${postResult?`ได้ <span class="sc">${postResult.pct}%</span>`:`เกณฑ์ผ่าน ${PASS_PERCENT}%`}</div>
+    </div>
+
+    ${!preDone ? `
+    <div class="pre-cta">
+      <div>
+        <h3>🧭 เริ่มจาก Pre-test ก่อนเรียน</h3>
+        <p>${QUIZ.length} ข้อ · ไม่มีผลตก ทำเพื่อวัดความรู้พื้นฐาน จะไม่เฉลยระหว่างทำ</p>
+      </div>
+      <button onclick="startQuiz('pre')">เริ่มทำ Pre-test</button>
+    </div>` : ''}
+
+    <div class="progress-band">
+      ${ringSVG(pct)}
+      <div class="ptext"><b>ความคืบหน้าบทเรียน</b><span>เรียนแล้ว ${completed.size} จาก ${MODULES.length} บท</span></div>
+    </div>
+
+    ${!preDone ? '<div class="lock-note">🔒 บทเรียนจะเปิดให้เข้าหลังทำ Pre-test เสร็จ เพื่อให้ผลก่อน–หลังเรียนเปรียบเทียบกันได้จริง</div>' : ''}
+    <div class="module-list ${preDone?'':'locked'}">
+      ${MODULES.map((m,i)=>`
+        <button class="module-card ${completed.has(m.id)?'done':''}" onclick="openModule(${i})">
+          <div class="mnum">${completed.has(m.id)?'✓':m.em}</div>
+          <div><h3>บทที่ ${i+1} · ${m.title}</h3><p>${m.desc}</p></div>
+          ${completed.has(m.id)?'<span class="status">เรียนจบแล้ว</span>':''}
+        </button>`).join("")}
+    </div>
+
+    <div class="test-cta">
+      <div>
+        <h3>📝 Post-test แบบทดสอบหลังเรียน</h3>
+        <p>${allDone ? `พร้อมแล้ว! ${QUIZ.length} ข้อ · เกณฑ์ผ่าน ${PASS_PERCENT}% · เฉลยทุกข้อหลังตอบ` : preDone ? `เรียนให้ครบทุกบทก่อนจึงจะเริ่มทำได้ (เหลืออีก ${MODULES.length - completed.size} บท)` : `ต้องทำ Pre-test และเรียนให้ครบทุกบทก่อน`}</p>
+      </div>
+      <button ${allDone&&preDone?'':'disabled'} onclick="startQuiz('post')">เริ่มทำ Post-test</button>
+    </div>`;
+  showScreen("screenDash");
+}
+
+/* ===================== Lesson ===================== */
+window.openModule = function(i){
+  currentModule = i;
+  const m = MODULES[i];
+  $("screenLesson").innerHTML = `
+    <div class="lesson-head">
+      <button class="crumb" onclick="backDash()">← กลับหน้าหลัก</button>
+      <h1><span class="em">${m.em}</span> บทที่ ${i+1} · ${m.title}</h1>
+    </div>
+    <div class="lesson-body">
+      ${m.body.map(b=>{
+        if(b.callout) return `<div class="callout ${b.callout==='red'?'red':''}"><b>${b.b}</b> ${b.p}</div>`;
+        return `<div class="lcard"><h3>${b.h}</h3>${b.p?`<p>${b.p}</p>`:""}${b.ul?`<ul>${b.ul.map(li=>`<li>${li}</li>`).join("")}</ul>`:""}</div>`;
+      }).join("")}
+    </div>
+    <div class="lesson-nav">
+      <button class="btn-ghost" onclick="backDash()">กลับหน้าหลัก</button>
+      <button class="btn-done" onclick="finishModule()">✓ เรียนบทนี้จบแล้ว${i<MODULES.length-1?' · ไปบทถัดไป':''}</button>
+    </div>`;
+  showScreen("screenLesson");
+};
+window.backDash = () => showDash();
+window.finishModule = function(){
+  completed.add(MODULES[currentModule].id);
+  if(currentModule < MODULES.length-1) openModule(currentModule+1);
+  else showDash();
+};
+
+/* ===================== Quiz (Pre / Post) ===================== */
+window.startQuiz = function(mode){
+  quizMode = mode;
+  quizIndex = 0; quizScore = 0; quizAnswers = [];
+  renderQuestion();
+};
+function renderQuestion(){
+  answered = false;
+  const q = QUIZ[quizIndex];
+  const keys = ["ก","ข","ค","ง"];
+  const isPre = quizMode === "pre";
+  $("screenQuiz").innerHTML = `
+    <div class="quiz-head">
+      <span class="badge ${isPre?'pre':'post'}">${isPre?'PRE-TEST · ก่อนเรียน':'POST-TEST · หลังเรียน'}</span>
+      <h1>${isPre?'🧭 Pre-test วัดความรู้ก่อนเรียน':'📝 Post-test แบบทดสอบหลังเรียน'}</h1>
+      ${isPre?'<p style="color:var(--ink-soft);font-size:.88rem">ตอบตามความเข้าใจปัจจุบัน ไม่มีเฉลยระหว่างทำ — คะแนนนี้ใช้เปรียบเทียบพัฒนาการหลังเรียน</p>':''}
+      <div class="quiz-progress"><i style="width:${quizIndex/QUIZ.length*100}%"></i></div>
+    </div>
+    <div class="qcard">
+      <div class="qno">ข้อ ${quizIndex+1} / ${QUIZ.length}</div>
+      <h2>${q.q}</h2>
+      <div class="choices">
+        ${q.c.map((c,ci)=>`<button class="choice" id="ch${ci}" onclick="answer(${ci})"><span class="key">${keys[ci]}.</span><span>${c}</span></button>`).join("")}
+      </div>
+      <div id="explainBox"></div>
+      <div class="quiz-next"><button class="btn-primary hidden" id="nextBtn" style="width:auto" onclick="nextQ()">${quizIndex<QUIZ.length-1?'ข้อถัดไป →':'ส่งคำตอบและดูผล'}</button></div>
+    </div>`;
+  showScreen("screenQuiz");
+}
+window.answer = function(ci){
+  if(answered) return;
+  answered = true;
+  const q = QUIZ[quizIndex];
+  const ok = ci === q.a;
+  if(ok) quizScore++;
+  quizAnswers.push({q:q.q, picked:q.c[ci], correct:q.c[q.a], ok, ex:q.ex});
+  q.c.forEach((_,i)=>{ $("ch"+i).disabled = true; });
+  if(quizMode === "pre"){
+    // Pre-test: ไม่เฉลย เพียงไฮไลต์ตัวเลือกที่เลือก
+    $("ch"+ci).classList.add("picked");
+  } else {
+    q.c.forEach((_,i)=>{
+      if(i===q.a) $("ch"+i).classList.add("correct");
+      else if(i===ci) $("ch"+i).classList.add("wrong");
+    });
+    $("explainBox").innerHTML = `<div class="explain">${ok?'✅ ถูกต้อง!':'❌ ยังไม่ถูก'} — ${q.ex}</div>`;
+  }
+  $("nextBtn").classList.remove("hidden");
+};
+window.nextQ = function(){
+  if(quizIndex < QUIZ.length-1){ quizIndex++; renderQuestion(); }
+  else (quizMode === "pre" ? showPreResult() : showPostResult());
+};
+
+/* ===================== ผล Pre-test ===================== */
+function showPreResult(){
+  const pct = Math.round(quizScore/QUIZ.length*100);
+  preResult = {score: quizScore, pct, when: new Date()};
+  $("screenResult").innerHTML = `
+    <div class="result">
+      <div class="big neutral">${pct}%</div>
+      <h2>บันทึกคะแนน Pre-test แล้ว</h2>
+      <p>ตอบถูก ${quizScore} จาก ${QUIZ.length} ข้อ — ไม่ต้องกังวลกับคะแนนนี้ มันคือจุดเริ่มต้น<br>เรียนจบแล้วมาทำ Post-test เพื่อดูพัฒนาการของคุณ</p>
+      <div id="saveSlot"></div>
+      <div class="actions">
+        <button class="btn-primary" onclick="goFirstLesson()">เริ่มเรียนบทที่ 1 →</button>
+        <button class="btn-ghost" onclick="backDash()">กลับหน้าหลัก</button>
+      </div>
+    </div>`;
+  showScreen("screenResult");
+  sendToSheet("pretest", quizScore, pct, null, st => { $("saveSlot").innerHTML = saveStatusHTML(st); });
+}
+window.goFirstLesson = () => openModule(0);
+
+/* ===================== ผล Post-test ===================== */
+function showPostResult(){
+  const pct = Math.round(quizScore/QUIZ.length*100);
+  const pass = pct >= PASS_PERCENT;
+  postResult = {score: quizScore, pct, when: new Date()};
+  const today = new Date().toLocaleDateString("th-TH",{year:"numeric",month:"long",day:"numeric"});
+  const delta = preResult ? pct - preResult.pct : null;
+  $("screenResult").innerHTML = `
+    <div class="result">
+      <div class="big ${pass?'pass':'fail'}">${pct}%</div>
+      <h2>${pass?'🎉 ยินดีด้วย คุณผ่านการทดสอบ':'ยังไม่ผ่านเกณฑ์ — ทบทวนบทเรียนแล้วลองอีกครั้งได้เลย'}</h2>
+      <p>ตอบถูก ${quizScore} จาก ${QUIZ.length} ข้อ · เกณฑ์ผ่าน ${PASS_PERCENT}%</p>
+      ${preResult ? `
+      <div class="compare">
+        <div><div class="lbl">Pre-test</div><div class="val">${preResult.pct}%</div></div>
+        <div><div class="lbl">Post-test</div><div class="val">${pct}%</div></div>
+        <div class="delta"><div class="lbl">พัฒนาการ</div><div class="val">${delta>=0?'+':''}${delta}%</div></div>
+      </div>` : ''}
+      ${pass?`
+      <div class="cert">
+        <div class="ttl">Certificate of Completion</div>
+        <div class="name">${esc(user.name)}</div>
+        <div class="meta">${esc(user.email)}</div>
+        <div class="meta">ผ่านหลักสูตร Cyber Security Awareness · Post-test ${pct}% ${preResult?`(Pre-test ${preResult.pct}%)`:''} · ${today}</div>
+      </div>`:''}
+      <div id="saveSlot"></div>
+      <div class="actions">
+        ${pass?'':'<button class="btn-primary" onclick="startQuiz(\'post\')">ทำแบบทดสอบอีกครั้ง</button>'}
+        <button class="btn-ghost" onclick="backDash()">กลับหน้าหลัก</button>
+      </div>
+      <div class="review">
+        <h3 style="margin-bottom:4px">สรุปคำตอบ</h3>
+        ${quizAnswers.map((a,i)=>`
+          <div class="rv ${a.ok?'ok':'no'}">
+            <b>ข้อ ${i+1}. ${a.q}</b>
+            ${a.ok ? `✅ ตอบถูก: ${a.correct}` : `❌ คุณตอบ: ${a.picked}<br>✔️ คำตอบที่ถูก: ${a.correct}`}
+            <br><span style="color:#3d5468">💡 ${a.ex}</span>
+          </div>`).join("")}
+      </div>
+    </div>`;
+  showScreen("screenResult");
+  sendToSheet("posttest", quizScore, pct, pass, st => { $("saveSlot").innerHTML = saveStatusHTML(st); });
+}
+
+function esc(s){ return s.replace(/[&<>"']/g, m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m])); }
+
+initGoogle();
+</script>
+</body>
+</html>
